@@ -2,34 +2,34 @@
 
 Une application moderne et intuitive pour la gestion d'une auto-école, construite avec **Laravel**, **Tailwind CSS** et **Alpine.js**.
 
-## 🚀 Fonctionnalités Clés
+## Fonctionnalités Clés
 
 L'application propose une gestion complète via différents tableaux de bord adaptés à chaque rôle :
 
-### 👑 Administrateur
+### Administrateur
 - **Tableau de bord statistique** : Vue d'ensemble des revenus, réservations et effectifs.
 - **Gestion des utilisateurs** : Administration complète des candidats et du personnel.
 - **Gestion des formations** : Création et modification des tarifs de formation.
 - **Exports PDF** : Génération de rapports pour les utilisateurs, séances, et paiements.
 
-### 👩‍💼 Assistante
+### Assistante
 - **Planification** : Gestion des séances de conduite et du planning.
 - **Suivi des paiements** : Enregistrement et suivi des règlements candidats.
 - **Gestion des réservations** : Validation et suivi du statut des réservations.
 
-### 🏎️ Moniteur
+### Moniteur
 - **Planning personnel** : Consultation des séances de conduite assignées.
 - **Suivi candidats** : Accès à la liste des élèves pour chaque séance.
 - **Total d'heures** : Récapitulatif des heures de conduite effectuées.
 
-### 🎓 Candidat (Élève)
+### Candidat (Élève)
 - **Réservation en ligne** : Choix des séances de conduite selon les disponibilités.
 - **Paiement sécurisé** : Règlement des formations et suivi des factures.
 - **Tableau de bord personnel** : Suivi de la progression (heures faites) et des paiements restants.
 
 ---
 
-## 🛠️ Installation et Lancement
+## Installation et Lancement
 
 Suivez ces étapes pour installer le projet localement :
 
@@ -64,7 +64,7 @@ Suivez ces étapes pour installer le projet localement :
 
 ---
 
-## 🔑 Accès aux Tableaux de Bord
+## Accès aux Tableaux de Bord
 
 Voici les comptes de test générés par défaut pour accéder à chaque interface :
 
@@ -77,7 +77,7 @@ Voici les comptes de test générés par défaut pour accéder à chaque interfa
 
 ---
 
-## 💻 Stack Technique
+## Stack Technique
 
 - **Backend** : Laravel 11.x
 - **Frontend** : Blade, Tailwind CSS, Alpine.js (Laravel Breeze Stack)
