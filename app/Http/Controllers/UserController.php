@@ -18,7 +18,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with('role');
+        \Illuminate\Support\Facades\Gate::authorize('viewAny', User::class);
+
+        $query = User::query();
 
         // Recherche textuelle
         if ($request->filled('search')) {
@@ -30,12 +32,9 @@ class UserController extends Controller
             });
         }
 
-        // Filtre par rôle
+        // Filtre par rôle (Enum value)
         if ($request->filled('role')) {
-            $roleName = $request->role;
-            $query->whereHas('role', function($q) use ($roleName) {
-                $q->where('name', $roleName);
-            });
+            $query->where('role', $request->role);
         }
 
         $users = $query->latest()->paginate(10);
@@ -47,9 +46,9 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-        $roles = Role::all();
+        \Illuminate\Support\Facades\Gate::authorize('create', User::class);
         $type = $request->query('type', 'candidat');
-        return view('users.form', compact('roles', 'type'));
+        return view('users.form', compact('type'));
     }
 
     /**
@@ -57,6 +56,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        \Illuminate\Support\Facades\Gate::authorize('create', User::class);
+
         $isStaff = $request->user_type === 'staff';
 
         $rules = [
@@ -68,7 +69,7 @@ class UserController extends Controller
         ];
 
         if ($isStaff) {
-            $rules['role_id'] = 'required|exists:roles,id';
+            $rules['role'] = ['required', \Illuminate\Validation\Rule::enum(\App\Enums\UserRole::class)];
         }
 
         $validated = $request->validate($rules);
@@ -77,22 +78,18 @@ class UserController extends Controller
         $validated['is_active'] = $request->has('is_active') ? $request->is_active : true;
 
         if (!$isStaff) {
-            $role = Role::where('name', 'candidat')->first();
-            $validated['role_id'] = $role ? $role->id : null;
+            $validated['role'] = \App\Enums\UserRole::CANDIDAT;
         }
 
         $user = User::create($validated);
 
-        if (!$isStaff) {
-            $candidat = Candidat::create(['user_id' => $user->id]);
-        } else {
-            // Si c'est un moniteur, on crée l'entrée dans la table moniteurs
-            if ($user->role && $user->role->name === 'moniteur') {
-                Moniteur::create(['user_id' => $user->id]);
-            }
+        if ($user->isCandidat()) {
+            Candidat::create(['user_id' => $user->id]);
+        } elseif ($user->isMoniteur()) {
+            Moniteur::create(['user_id' => $user->id]);
         }
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
+        return redirect()->route(auth()->user()->role->value . '.users.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
     /**
@@ -100,9 +97,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::all();
+        \Illuminate\Support\Facades\Gate::authorize('update', $user);
         $type = $user->isCandidat() ? 'candidat' : 'staff';
-        return view('users.form', compact('user', 'roles', 'type'));
+        return view('users.form', compact('user', 'type'));
     }
 
     /**
@@ -110,6 +107,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        \Illuminate\Support\Facades\Gate::authorize('update', $user);
+
         $isStaff = $request->user_type === 'staff' || !$user->isCandidat();
 
         $rules = [
@@ -123,8 +122,8 @@ class UserController extends Controller
             $rules['password'] = 'string|min:8';
         }
 
-        if ($isStaff && Auth()->user()->isAdmin()) {
-            $rules['role_id'] = 'required|exists:roles,id';
+        if ($isStaff && auth()->user()->isAdmin()) {
+            $rules['role'] = ['required', \Illuminate\Validation\Rule::enum(\App\Enums\UserRole::class)];
         }
 
         $validated = $request->validate($rules);
@@ -137,11 +136,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        if (!$isStaff && $request->filled('formation_id') && $user->candidat) {
-             // Maj formtion si nécessaire
-        }
-
-        return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+        return redirect()->route(auth()->user()->role->value . '.users.index')->with('success', 'Utilisateur mis à jour avec succès.');
     }
 
     /**
@@ -149,11 +144,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        \Illuminate\Support\Facades\Gate::authorize('delete', $user);
+
         if ($user->id === auth()->id()) {
-            return redirect()->route('users.index')->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+            return redirect()->route(auth()->user()->role->value . '.users.index')->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
         }
 
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
+        return redirect()->route(auth()->user()->role->value . '.users.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
 }
