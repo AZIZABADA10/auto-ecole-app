@@ -49,7 +49,7 @@
                             <span class="text-sm font-bold text-slate-700">{{ optional($seance->formation)->nom }}</span>
                         </td>
                         <td class="px-8 py-6 whitespace-nowrap">
-                            @foreach($seance->reservations as $res)
+                            @forelse($seance->reservations as $res)
                                 <div class="flex items-center mb-1 last:mb-0">
                                     <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600 mr-2">
                                         {{ substr(optional($res->candidat->user)->name ?? '?', 0, 1) }}
@@ -58,7 +58,7 @@
                                 </div>
                             @empty
                                 <span class="text-xs text-slate-400 italic">Aucun élève inscrit</span>
-                            @endforeach
+                            @endforelse
                         </td>
                         <td class="px-8 py-6 whitespace-nowrap">
                             @if($seance->statut === 'disponible')
