@@ -8,7 +8,7 @@ class User extends Authenticatable {
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'role_id', 'phone', 'is_active'
+        'name', 'email', 'password', 'role', 'phone', 'is_active'
     ];
 
     protected $hidden = [
@@ -20,11 +20,8 @@ class User extends Authenticatable {
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'role' => \App\Enums\UserRole::class,
         ];
-    }
-
-    public function role() {
-        return $this->belongsTo(Role::class);
     }
 
     public function candidat() {
@@ -36,14 +33,18 @@ class User extends Authenticatable {
     }
 
     public function isAdmin() {
-        return $this->role && $this->role->name === 'admin';
+        return $this->role === \App\Enums\UserRole::ADMIN;
     }
 
     public function isAssistante() {
-        return $this->role && $this->role->name === 'assistante';
+        return $this->role === \App\Enums\UserRole::ASSISTANTE;
+    }
+
+    public function isMoniteur() {
+        return $this->role === \App\Enums\UserRole::MONITEUR;
     }
 
     public function isCandidat() {
-        return $this->role && $this->role->name === 'candidat';
+        return $this->role === \App\Enums\UserRole::CANDIDAT;
     }
 }
