@@ -1,0 +1,48 @@
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use App\Models\Formation;
+
+class FormationController extends Controller {
+    public function index() {
+        return view('formations.index', ['formations' => Formation::all()]);
+    }
+    public function create() {
+        return view('formations.create');
+    }
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'nom' => 'required',
+            'description' => 'nullable',
+            'prix' => 'required|numeric',
+            'duree_heures' => 'nullable|integer',
+            'image_path' => 'nullable|image',
+        ]);
+        if ($request->hasFile('image_path')) {
+            $validated['image_path'] = $request->file('image_path')->store('images', 'public');
+        }
+        Formation::create($validated);
+        return redirect()->route('formations.index')->with('success', 'Formation ajoutée');
+    }
+    public function edit(Formation $formation) {
+        return view('formations.edit', compact('formation'));
+    }
+    public function update(Request $request, Formation $formation) {
+        $validated = $request->validate([
+            'nom' => 'required',
+            'description' => 'nullable',
+            'prix' => 'required|numeric',
+            'duree_heures' => 'nullable|integer',
+            'image_path' => 'nullable|image',
+        ]);
+        if ($request->hasFile('image_path')) {
+            $validated['image_path'] = $request->file('image_path')->store('images', 'public');
+        }
+        $formation->update($validated);
+        return redirect()->route('formations.index')->with('success', 'Formation modifiée');
+    }
+    public function destroy(Formation $formation) {
+        $formation->delete();
+        return redirect()->route('formations.index')->with('success', 'Formation supprimée');
+    }
+}
