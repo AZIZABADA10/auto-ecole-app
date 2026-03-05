@@ -41,12 +41,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // GROUPE ASSISTANTE
     Route::middleware(['role:assistante'])->prefix('assistante')->name('assistante.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        
+        // Routes d'export (AVANT les ressources)
+        Route::get('/seances/export-pdf', [SeanceController::class, 'exportPdf'])->name('seances.exportPdf');
+        Route::get('/paiements/export-pdf', [PaiementController::class, 'exportPdf'])->name('paiements.exportPdf');
+
         Route::resource('seances', SeanceController::class); // Planifier séances
         Route::resource('paiements', PaiementController::class); // Enregistrer paiements
         Route::get('/reservations', [ReservationController::class, 'indexAdmin'])->name('reservations.index');
         Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
-        Route::get('/seances/export-pdf', [SeanceController::class, 'exportPdf'])->name('seances.exportPdf');
-        Route::get('/paiements/export-pdf', [PaiementController::class, 'exportPdf'])->name('paiements.exportPdf');
     });
 
     // GROUPE MONITEUR
@@ -65,6 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/paiements', [PaiementController::class, 'indexCandidat'])->name('paiements.index');
         Route::get('/paiements/{paiement}/pay', [PaiementController::class, 'pay'])->name('paiements.pay');
         Route::post('/paiements/{paiement}/success', [PaiementController::class, 'success'])->name('paiements.success');
+        Route::get('/paiements/{paiement}/invoice', [PaiementController::class, 'downloadInvoice'])->name('paiements.invoice');
     });
 
     // Profile (Commun)

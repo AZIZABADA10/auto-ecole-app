@@ -145,12 +145,31 @@ class PaiementController extends Controller
      */
     public function success(Request $request, Paiement $paiement)
     {
-        // Après succès Stripe (webhook ou redirect), on met à jour.
         $paiement->update([
             'statut' => 'paye',
             'date_paiement' => now(),
+            'methode_paiement' => 'carte',
         ]);
 
-        return redirect()->route('candidat.paiements.index')->with('success', 'Paiement effectué avec succès !');
+        return view('paiements.success', compact('paiement'));
+    }
+
+    /**
+     * Télécharger la facture PDF.
+     */
+    public function downloadInvoice(Paiement $paiement)
+    {
+        // Vérifier que le paiement appartient au candidat connecté ou que c'est un admin
+        if (!auth()->user()->isAdmin() && $paiement->candidat_id !== auth()->user()->candidat->id) {
+            abort(403);
+        }
+
+        if ($paiement->statut !== 'paye') {
+            return back()->with('error', 'La facture n\'est disponible que pour les paiements complétés.');
+        }
+
+        $pdf = Pdf::loadView('paiements.facture', compact('paiement'));
+        
+        return $pdf->download('facture_' . str_pad($paiement->id, 6, '0', STR_PAD_LEFT) . '.pdf');
     }
 }
