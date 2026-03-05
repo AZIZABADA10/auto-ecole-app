@@ -5,6 +5,7 @@ use App\Models\Seance;
 use App\Models\Moniteur;
 use App\Models\Formation;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SeanceController extends Controller
 {
@@ -68,5 +69,15 @@ class SeanceController extends Controller
 
         $seance->delete();
         return redirect()->route(auth()->user()->role->value . '.seances.index')->with('success', 'Séance supprimée.');
+    }
+
+    /**
+     * Exporter toutes les séances en PDF.
+     */
+    public function exportPdf()
+    {
+        $seances = Seance::with(['moniteur.user', 'formation'])->orderBy('date')->get();
+        $pdf = Pdf::loadView('seances.pdf', compact('seances'))->setPaper('a4', 'landscape');
+        return $pdf->download('seances_' . now()->format('Y-m-d') . '.pdf');
     }
 }
