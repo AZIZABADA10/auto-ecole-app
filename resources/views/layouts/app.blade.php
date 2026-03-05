@@ -20,52 +20,89 @@
                 </a>
             </div>
             <nav class="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
-                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('dashboard') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <!-- ACCUEIL (Dynamique selon rôle) -->
+                @php
+                    $dashboardRoute = match(Auth::user()->role) {
+                        \App\Enums\UserRole::ADMIN => 'admin.dashboard',
+                        \App\Enums\UserRole::ASSISTANTE => 'assistante.dashboard',
+                        \App\Enums\UserRole::MONITEUR => 'moniteur.dashboard',
+                        \App\Enums\UserRole::CANDIDAT => 'candidat.dashboard',
+                        default => 'dashboard'
+                    };
+                @endphp
+                <a href="{{ route($dashboardRoute) }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('*.dashboard') || request()->routeIs('dashboard') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     Tableau de Bord
                 </a>
-                
-                @if(Auth::user() && (Auth::user()->isAdmin() || Auth::user()->isAssistante()))
-                <div class="pt-4 pb-2">
-                    <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Gestion</p>
-                </div>
-                <a href="{{ route('reservations.admin') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('reservations.admin') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('reservations.admin') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
-                    Réservations
+
+                <!-- SIDEBAR ADMIN -->
+                @if(Auth::user()->isAdmin())
+                <div class="pt-4 pb-2"><p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Administration</p></div>
+                <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('admin.users.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Utilisateurs & Staff
                 </a>
-                <a href="{{ route('formations.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('formations.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('formations.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                <a href="{{ route('admin.formations.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('admin.formations.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
                     Formations
                 </a>
-                <a href="{{ route('seances.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('seances.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('seances.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Séances (Planning)
+                <a href="{{ route('admin.seances.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('admin.seances.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+                    Séances
                 </a>
-                <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('users.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('users.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    Candidats & Staff
+                <a href="{{ route('admin.reservations.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('admin.reservations.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    Toutes les Réservations
                 </a>
-                <a href="{{ route('paiements.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('paiements.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('paiements.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <a href="{{ route('admin.paiements.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('admin.paiements.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     Paiements
                 </a>
                 @endif
-                
-                @if(Auth::user() && Auth::user()->isCandidat())
-                <div class="pt-4 pb-2">
-                    <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Mon Apprentissage</p>
-                </div>
-                <!-- Candidat links -->
-                <a href="{{ route('reservations.create') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('reservations.create') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('reservations.create') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    Planifier Séances
+
+                <!-- SIDEBAR ASSISTANTE -->
+                @if(Auth::user()->isAssistante())
+                <div class="pt-4 pb-2"><p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Gestion Bureau</p></div>
+                <a href="{{ route('assistante.seances.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('assistante.seances.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+                    Planning Séances
                 </a>
-                <a href="{{ route('reservations.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('reservations.index') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('reservations.index') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                <a href="{{ route('assistante.reservations.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('assistante.reservations.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    Réservations
+                </a>
+                <a href="{{ route('assistante.paiements.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('assistante.paiements.*') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Enregistrer Paiements
+                </a>
+                @endif
+
+                <!-- SIDEBAR MONITEUR -->
+                @if(Auth::user()->isMoniteur())
+                <div class="pt-4 pb-2"><p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Espace Moniteur</p></div>
+                <a href="{{ route('moniteur.planning') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('moniteur.planning') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
                     Mon Planning
                 </a>
-                <a href="{{ route('paiements.candidat') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('paiements.candidat') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('paiements.candidat') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                @endif
+
+                <!-- SIDEBAR CANDIDAT -->
+                @if(Auth::user()->isCandidat())
+                <div class="pt-4 pb-2"><p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Mon Parcours</p></div>
+                <a href="{{ route('candidat.formations') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('candidat.formations') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Nos Formations
+                </a>
+                <a href="{{ route('candidat.reservations.create') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('candidat.reservations.create') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Réserver
+                </a>
+                <a href="{{ route('candidat.reservations.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('candidat.reservations.index') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+                    Mon Planning
+                </a>
+                <a href="{{ route('candidat.paiements.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition group {{ request()->routeIs('candidat.paiements.index') ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-300' }}">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     Mes Paiements
                 </a>
                 @endif
@@ -89,7 +126,7 @@
                             {{ substr(Auth::user()->name, 0, 1) }}
                         </div>
                         <span class="text-sm font-semibold text-gray-700 hidden sm:block">{{ Auth::user()->name }}</span>
-                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-600 hidden sm:block">{{ ucfirst(Auth::user()->role->name ?? 'User') }}</span>
+                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-600 hidden sm:block">{{ Auth::user()->role->label() }}</span>
                     </div>
                     @endif
                     <div class="h-6 w-px bg-gray-200"></div>
