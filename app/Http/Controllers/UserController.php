@@ -10,6 +10,7 @@ use App\Models\Moniteur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UserController extends Controller
 {
@@ -152,5 +153,18 @@ class UserController extends Controller
 
         $user->delete();
         return redirect()->route(auth()->user()->role->value . '.users.index')->with('success', 'Utilisateur supprimé avec succès.');
+    }
+
+    /**
+     * Exporter tous les utilisateurs en PDF.
+     */
+    public function exportPdf()
+    {
+        \Illuminate\Support\Facades\Gate::authorize('viewAny', User::class);
+        
+        $users = User::orderBy('role')->orderBy('name')->get();
+        $pdf = Pdf::loadView('users.pdf', compact('users'))->setPaper('a4', 'landscape');
+        
+        return $pdf->download('utilisateurs_' . now()->format('Y-m-d') . '.pdf');
     }
 }
