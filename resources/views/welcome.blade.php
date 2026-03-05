@@ -9,7 +9,7 @@
             <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
                 <div class="lg:col-span-6 text-center lg:text-left">
                     <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-100/50 border border-emerald-200 text-emerald-700 text-xs font-black uppercase tracking-widest mb-8 animate-bounce">
-                        N°1 de la conduite à Rabat
+                        N°1 de la conduite à safi
                     </div>
                     <h1 class="text-5xl sm:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight">
                         La route du <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500">succès</span> commence ici.
@@ -37,7 +37,7 @@
                         <div class="w-px h-8 bg-slate-200"></div>
                         <div class="flex flex-col">
                             <span class="text-2xl font-black text-slate-900">+1.2k</span>
-                            <span class="text-xs font-bold text-slate-500 uppercase">Diplômés en 2025</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Diplômés en 2026</span>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                             </div>
                             <div>
                                 <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Taux de réussite</p>
-                                <p class="text-xl font-black text-slate-900">98% en 2025</p>
+                                <p class="text-xl font-black text-slate-900">98% en 2026</p>
                             </div>
                         </div>
                     </div>
@@ -174,11 +174,11 @@
                 
                 <div class="bg-slate-900 p-12 rounded-[4rem] text-white shadow-3xl shadow-slate-200">
                     <h4 class="text-3xl font-black mb-8">Notre Agence</h4>
-                    <p class="text-slate-400 font-medium mb-10 leading-relaxed">Retrouvez-nous au cœur de Rabat pour vos cours de code théoriques et pour rencontrer vos moniteurs.</p>
+                    <p class="text-slate-400 font-medium mb-10 leading-relaxed">Retrouvez-nous au cœur de safi pour vos cours de code théoriques et pour rencontrer vos moniteurs.</p>
                     <div class="space-y-4 text-lg font-bold">
                         <p class="flex items-center gap-4">
                             <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            Angle Avenue Mohammed V, Rabat
+                            Angle Avenue Mohammed V, safi
                         </p>
                         <p class="flex items-center gap-4">
                             <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

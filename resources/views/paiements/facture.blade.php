@@ -33,7 +33,7 @@
                 <td>
                     <div class="company-info">
                         <h2>AUTO-ÉCOLE PRO</h2>
-                        <p>123 Boulevard Mohamed V, Casablanca<br>
+                        <p>123 Boulevard Mohamed V, Safi<br>
                         contact@auto-ecole.ma | +212 522 00 00 00</p>
                     </div>
                 </td>

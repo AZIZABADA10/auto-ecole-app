@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">Créer un compte ✨</h2>
+                    <h2 class="text-3xl font-bold text-gray-900">Créer un compte </h2>
                     <p class="text-gray-500 mt-2">Rejoignez-nous en complétant vos informations.</p>
                 </div>
 

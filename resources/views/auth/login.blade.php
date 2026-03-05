@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold text-gray-900">Bon retour ! 👋</h2>
+                    <h2 class="text-3xl font-bold text-gray-900">Bon retour !</h2>
                     <p class="text-gray-500 mt-2">Connectez-vous à votre espace personnel</p>
                 </div>
 
