@@ -60,7 +60,7 @@
                 <p class="text-slate-400 mt-1 font-medium text-sm">Prévoyez votre prochain cours dès maintenant.</p>
             @endif
             <div class="mt-6">
-                <a href="{{ route('reservations.create') }}" class="inline-flex items-center text-sm font-bold text-white hover:text-emerald-400 transition">
+                <a href="{{ route('candidat.reservations.create') }}" class="inline-flex items-center text-sm font-bold text-white hover:text-emerald-400 transition">
                     Réserver une séance 
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
@@ -76,7 +76,7 @@
                 <h3 class="text-xl font-bold text-slate-800">Accès Rapide</h3>
             </div>
             <div class="space-y-4">
-                <a href="{{ route('reservations.index') }}" class="flex items-center p-4 rounded-2xl bg-emerald-50 border border-emerald-100 group hover:bg-emerald-600 transition-all duration-300">
+                <a href="{{ route('candidat.reservations.index') }}" class="flex items-center p-4 rounded-2xl bg-emerald-50 border border-emerald-100 group hover:bg-emerald-600 transition-all duration-300">
                     <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 mr-4 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                     </div>
@@ -86,7 +86,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('paiements.candidat') }}" class="flex items-center p-4 rounded-2xl bg-blue-50 border border-blue-100 group hover:bg-blue-600 transition-all duration-300">
+                <a href="{{ route('candidat.paiements.index') }}" class="flex items-center p-4 rounded-2xl bg-blue-50 border border-blue-100 group hover:bg-blue-600 transition-all duration-300">
                     <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-600 mr-4 shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
