@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        Vue d'ensemble Admin
+        Console d'Administration
     </x-slot>
 
     <!-- KPIs -->
