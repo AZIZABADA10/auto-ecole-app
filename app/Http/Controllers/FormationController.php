@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Formation;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FormationController extends Controller {
     public function index() {
@@ -44,5 +45,15 @@ class FormationController extends Controller {
     public function destroy(Formation $formation) {
         $formation->delete();
         return redirect()->route('admin.formations.index')->with('success', 'Formation supprimée');
+    }
+
+    /**
+     * Exporter toutes les formations en PDF.
+     */
+    public function exportPdf()
+    {
+        $formations = Formation::all();
+        $pdf = Pdf::loadView('formations.pdf', compact('formations'));
+        return $pdf->download('formations_' . now()->format('Y-m-d') . '.pdf');
     }
 }
