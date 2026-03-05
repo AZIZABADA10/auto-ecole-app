@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Models\Formation;
 use App\Models\Seance;
 use App\Models\Reservation;
+use App\Models\Paiement;
 
 class ReservationController extends Controller {
     public function create() {
@@ -20,13 +21,25 @@ class ReservationController extends Controller {
         $candidat = $request->user()->candidat;
         if (!$candidat) abort(403, 'Profil candidat requis.');
 
-        Reservation::create([
+        $reservation = Reservation::create([
             'seance_id' => $request->seance_id,
             'candidat_id' => $candidat->id,
             'statut' => 'en_attente'
         ]);
 
-        return redirect()->route('candidat.dashboard')->with('success', 'Réservation validée.');
+        // Créer automatiquement un paiement "en attente"
+        $seance = Seance::with('formation')->find($request->seance_id);
+        $paiement = Paiement::create([
+            'candidat_id' => $candidat->id,
+            'formation_id' => $seance->formation_id,
+            'montant' => $seance->formation->prix ?? 0,
+            'statut' => 'non_paye',
+            'methode_paiement' => 'carte', // Par défaut pour Stripe
+            'date_paiement' => now(),
+        ]);
+
+        // Rediriger vers la page de paiement (Stripe)
+        return redirect()->route('candidat.paiements.pay', $paiement)->with('success', 'Réservation enregistrée. Veuillez procéder au paiement.');
     }
 
     public function index(Request $request) {
