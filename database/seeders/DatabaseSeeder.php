@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $roleAdmin = \App\Models\Role::create(['name' => 'admin']);
         $roleAssistante = \App\Models\Role::create(['name' => 'assistante']);
         $roleCandidat = \App\Models\Role::create(['name' => 'candidat']);
+        $roleMoniteur = \App\Models\Role::create(['name' => 'moniteur']);
 
         User::create([
             'name' => 'Administrateur',
@@ -34,6 +35,16 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleAssistante->id,
             'is_active' => true,
         ]);
+
+        $prof = User::create([
+            'name' => 'Moniteur Ahmed',
+            'email' => 'moniteur@auto-ecole.com',
+            'password' => bcrypt('password'),
+            'role_id' => $roleMoniteur->id,
+            'is_active' => true,
+        ]);
+        
+        \App\Models\Moniteur::create(['user_id' => $prof->id, 'specialite' => 'Permis B']);
 
         $eleve = User::create([
             'name' => 'Élève Test',
