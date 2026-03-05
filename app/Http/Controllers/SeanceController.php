@@ -34,7 +34,7 @@ class SeanceController extends Controller
 
         Seance::create($validated);
 
-        return redirect()->route('seances.index')->with('success', 'Séance créée avec succès.');
+        return redirect()->route(auth()->user()->role->value . '.seances.index')->with('success', 'Séance créée avec succès.');
     }
 
     public function edit(Seance $seance)
@@ -57,7 +57,7 @@ class SeanceController extends Controller
 
         $seance->update($validated);
 
-        return redirect()->route('seances.index')->with('success', 'Séance mise à jour.');
+        return redirect()->route(auth()->user()->role->value . '.seances.index')->with('success', 'Séance mise à jour.');
     }
 
     public function destroy(Seance $seance)
@@ -67,6 +67,6 @@ class SeanceController extends Controller
         }
 
         $seance->delete();
-        return redirect()->route('seances.index')->with('success', 'Séance supprimée.');
+        return redirect()->route(auth()->user()->role->value . '.seances.index')->with('success', 'Séance supprimée.');
     }
 }
