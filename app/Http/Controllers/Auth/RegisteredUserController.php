@@ -37,19 +37,18 @@ class RegisteredUserController extends Controller
         ]);
         
         $userCount = User::count();
-        $roleName = $userCount === 0 ? 'admin' : 'candidat';
-        $role = \App\Models\Role::where('name', $roleName)->first();
+        $role = $userCount === 0 ? \App\Enums\UserRole::ADMIN : \App\Enums\UserRole::CANDIDAT;
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'role_id' => $role ? $role->id : null,
+            'role' => $role,
             'is_active' => true,
         ]);
 
-        if ($roleName === 'candidat') {
+        if ($role === \App\Enums\UserRole::CANDIDAT) {
             \App\Models\Candidat::create(['user_id' => $user->id]);
         }
 
@@ -57,6 +56,14 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $redirectTo = match ($user->role) {
+            \App\Enums\UserRole::ADMIN      => 'admin.dashboard',
+            \App\Enums\UserRole::ASSISTANTE => 'assistante.dashboard',
+            \App\Enums\UserRole::MONITEUR   => 'moniteur.dashboard',
+            \App\Enums\UserRole::CANDIDAT   => 'candidat.dashboard',
+            default                         => 'dashboard',
+        };
+
+        return redirect()->route($redirectTo);
     }
 }
