@@ -5,6 +5,7 @@ use App\Models\Paiement;
 use App\Models\Candidat;
 use App\Models\Formation;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaiementController extends Controller
 {
@@ -111,5 +112,45 @@ class PaiementController extends Controller
         $resteAPayer = max(0, $totalAPayer - $totalPaye);
 
         return view('paiements.candidat_index', compact('paiements', 'totalPaye', 'totalAPayer', 'resteAPayer'));
+    }
+    /**
+     * Exporter tous les paiements en PDF.
+     */
+    public function exportPdf()
+    {
+        \Illuminate\Support\Facades\Gate::authorize('manage-paiements');
+
+        $paiements = Paiement::with(['candidat.user', 'formation'])
+                              ->orderBy('date_paiement', 'desc')
+                              ->get();
+
+        $pdf = Pdf::loadView('paiements.pdf', compact('paiements'))
+                  ->setPaper('a4', 'portrait');
+
+        return $pdf->download('paiements_' . now()->format('Y-m-d') . '.pdf');
+    }
+
+    /**
+     * Initier le paiement Stripe pour un record donné.
+     */
+    public function pay(Paiement $paiement)
+    {
+        // On pourrait ici créer une session Stripe.
+        // Pour l'instant, on simule une page de redirection vers Stripe.
+        return view('paiements.pay', compact('paiement'));
+    }
+
+    /**
+     * Confirmation du paiement (Callback).
+     */
+    public function success(Request $request, Paiement $paiement)
+    {
+        // Après succès Stripe (webhook ou redirect), on met à jour.
+        $paiement->update([
+            'statut' => 'paye',
+            'date_paiement' => now(),
+        ]);
+
+        return redirect()->route('candidat.paiements.index')->with('success', 'Paiement effectué avec succès !');
     }
 }
