@@ -8,7 +8,7 @@
             <h2 class="text-3xl font-extrabold text-slate-900">Calendrier des cours</h2>
             <p class="text-slate-500 mt-1">Retrouvez ici toutes vos séances réservées et leur avancement.</p>
         </div>
-        <a href="{{ route('reservations.create') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 border border-transparent rounded-2xl font-bold text-sm text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:shadow-emerald-300 transition-all duration-300">
+        <a href="{{ route('candidat.reservations.create') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 border border-transparent rounded-2xl font-bold text-sm text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:shadow-emerald-300 transition-all duration-300">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
             Réserver un nouveau cours
         </a>
@@ -75,7 +75,7 @@
                         </td>
                         <td class="px-8 py-6 whitespace-nowrap text-right">
                             @if($reservation->statut === 'en_attente')
-                            <form action="{{ route('reservations.destroy', $reservation) }}" method="POST" onsubmit="return confirm('Souhaitez-vous vraiment annuler cette réservation ?');" class="inline">
+                            <form action="{{ route('candidat.reservations.destroy', $reservation) }}" method="POST" onsubmit="return confirm('Souhaitez-vous vraiment annuler cette réservation ?');" class="inline">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="p-2 text-slate-400 hover:text-red-600 transition-colors bg-slate-50 hover:bg-red-50 rounded-xl">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -95,7 +95,7 @@
                                 </div>
                                 <h3 class="text-lg font-bold text-slate-800">Aucune réservation</h3>
                                 <p class="text-slate-500 mt-1 max-w-xs mx-auto">Vous n'avez pas encore de séances prévues. Commencez par en réserver une !</p>
-                                <a href="{{ route('reservations.create') }}" class="mt-6 px-6 py-2 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition">Réserver maintenant</a>
+                                <a href="{{ route('candidat.reservations.create') }}" class="mt-6 px-6 py-2 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition">Réserver maintenant</a>
                             </div>
                         </td>
                     </tr>
