@@ -46,7 +46,7 @@
                     <!-- Action Button -->
                     @auth
                         @if(Auth::user()->isCandidat())
-                            <a href="{{ route('reservations.create', ['formation_id' => $formation->id]) }}" class="block w-full text-center bg-slate-900 hover:bg-emerald-600 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-300">
+                            <a href="{{ route('candidat.reservations.create') }}" class="block w-full text-center bg-slate-900 hover:bg-emerald-600 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-300">
                                 Réserver une séance
                             </a>
                         @else
