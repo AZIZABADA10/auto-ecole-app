@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-        <form action="{{ isset($formation) ? route('formations.update', $formation) : route('formations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ isset($formation) ? route('admin.formations.update', $formation) : route('admin.formations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @if(isset($formation)) @method('PUT') @endif
 
@@ -54,7 +54,7 @@
             </div>
 
             <div class="pt-6 border-t border-gray-100 flex justify-end gap-3 mt-8">
-                <a href="{{ route('formations.index') }}" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition shadow-sm font-medium">
+                <a href="{{ route('admin.formations.index') }}" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition shadow-sm font-medium">
                     Annuler
                 </a>
                 <button type="submit" class="px-6 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition shadow-md font-medium">
