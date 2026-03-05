@@ -23,6 +23,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // GROUPE ADMIN
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Routes d'export (AVANT les ressources pour éviter les conflits d'URL)
+        Route::get('users/export-pdf', [UserController::class, 'exportPdf'])->name('users.exportPdf');
+        Route::get('formations/export-pdf', [FormationController::class, 'exportPdf'])->name('formations.exportPdf');
+        Route::get('seances/export-pdf', [SeanceController::class, 'exportPdf'])->name('seances.exportPdf');
+        Route::get('paiements/export-pdf', [PaiementController::class, 'exportPdf'])->name('paiements.exportPdf');
+
         Route::resource('formations', FormationController::class)->except(['show']);
         Route::resource('users', UserController::class);
         Route::resource('seances', SeanceController::class);
@@ -38,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('paiements', PaiementController::class); // Enregistrer paiements
         Route::get('/reservations', [ReservationController::class, 'indexAdmin'])->name('reservations.index');
         Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
+        Route::get('/seances/export-pdf', [SeanceController::class, 'exportPdf'])->name('seances.exportPdf');
+        Route::get('/paiements/export-pdf', [PaiementController::class, 'exportPdf'])->name('paiements.exportPdf');
     });
 
     // GROUPE MONITEUR
@@ -54,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/formations', [PublicController::class, 'formations'])->name('formations');
         Route::resource('reservations', ReservationController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::get('/paiements', [PaiementController::class, 'indexCandidat'])->name('paiements.index');
+        Route::get('/paiements/{paiement}/pay', [PaiementController::class, 'pay'])->name('paiements.pay');
+        Route::post('/paiements/{paiement}/success', [PaiementController::class, 'success'])->name('paiements.success');
     });
 
     // Profile (Commun)
