@@ -1,39 +1,74 @@
 @extends('layouts.public')
 
 @section('content')
-<div class="bg-white py-16 sm:py-24">
+<div class="bg-slate-50 py-16 sm:py-24 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto">
-            <h2 class="text-base font-semibold text-emerald-600 tracking-wide uppercase">Toutes nos Formations</h2>
-            <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl">Trouvez la formule qui vous correspond</p>
-            <p class="mt-4 text-xl text-gray-500">Du code à la conduite, nous vous proposons un apprentissage adapté à votre profil.</p>
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-emerald-600 font-bold tracking-wide uppercase text-sm mb-3">Nos Formules</h2>
+            <h1 class="text-4xl font-extrabold text-slate-900 sm:text-5xl tracking-tight">Apprenez à conduire<br>à votre rythme</h1>
+            <p class="mt-4 text-xl text-slate-500">Choisissez la formation qui vous correspond et rejoignez des centaines de candidats satisfaits.</p>
         </div>
 
-        <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             @forelse($formations as $formation)
-            <div class="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden flex flex-col shadow-sm hover:shadow-md transition">
-                <div class="h-48 bg-emerald-100 flex items-center justify-center p-6 text-emerald-600">
-                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-slate-100 flex flex-col">
+                <!-- Image Section -->
+                <div class="relative h-60 w-full overflow-hidden bg-slate-200">
+                    @if($formation->image_path)
+                        <img src="{{ Storage::url($formation->image_path) }}" alt="{{ $formation->nom }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    @else
+                        <!-- Fallback Placeholder -->
+                        <div class="w-full h-full flex items-center justify-center bg-emerald-100 text-emerald-500">
+                            <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    @endif
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-sm">
+                        <span class="text-sm font-bold text-slate-900">{{ number_format($formation->prix, 0) }} DH</span>
+                    </div>
                 </div>
-                <div class="p-8 flex-1">
-                    <h3 class="text-2xl font-bold text-gray-900">{{ $formation->nom }}</h3>
-                    <p class="mt-4 text-gray-600 leading-relaxed">{{ $formation->description }}</p>
-                    <ul class="mt-6 space-y-4">
-                        <li class="flex items-center text-gray-600">
-                            <svg class="h-5 w-5 text-emerald-500 shrink-0 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                            </svg>
+
+                <!-- Content Section -->
+                <div class="p-8 flex-1 flex flex-col">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">{{ $formation->nom }}</h3>
+                    <p class="text-slate-500 leading-relaxed mb-6 flex-1">{{ $formation->description }}</p>
+                    
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm font-medium text-slate-600">
+                            <svg class="h-5 w-5 text-emerald-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             {{ $formation->duree_heures ?? 20 }} heures de pratique
                         </li>
+                        <li class="flex items-center text-sm font-medium text-slate-600">
+                            <svg class="h-5 w-5 text-emerald-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Code de la route inclus
+                        </li>
                     </ul>
-                </div>
-                <div class="p-8 bg-gray-100 mt-auto border-t border-gray-200">
-                    <p class="text-center text-4xl font-extrabold text-slate-800">{{ number_format($formation->prix, 2) }} €</p>
-                    <a href="{{ route('register') }}" class="mt-6 block w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center font-bold py-3 px-4 rounded-xl shadow-sm transition">Commencer</a>
+
+                    <!-- Action Button -->
+                    @auth
+                        @if(Auth::user()->isCandidat())
+                            <a href="{{ route('reservations.create', ['formation_id' => $formation->id]) }}" class="block w-full text-center bg-slate-900 hover:bg-emerald-600 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-300">
+                                Réserver une séance
+                            </a>
+                        @else
+                            <button disabled class="w-full text-center bg-slate-100 text-slate-400 font-semibold py-3.5 px-6 rounded-xl cursor-not-allowed">
+                                Espace administrateur
+                            </button>
+                        @endif
+                    @else
+                        <a href="{{ route('register') }}" class="block w-full text-center bg-slate-900 hover:bg-emerald-600 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-300 shadow-md hover:shadow-lg">
+                            M'inscrire pour réserver
+                        </a>
+                    @endauth
                 </div>
             </div>
             @empty
-            <div class="col-span-3 text-center text-gray-500 py-8">Aucune formation disponible.</div>
+            <div class="col-span-full pt-12 text-center">
+                <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-slate-100 text-slate-400 mb-6">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Aucune formation disponible</h3>
+                <p class="text-slate-500">Nos offres seront bientôt mises à jour. Revenez plus tard !</p>
+            </div>
             @endforelse
         </div>
     </div>

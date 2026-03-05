@@ -120,5 +120,6 @@
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-slate-900 bg-opacity-50 z-40 md:hidden transition-opacity"></div>
     </div>
+    @stack('scripts')
 </body>
 </html>

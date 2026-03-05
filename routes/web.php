@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:admin,assistante')->group(function () {
         Route::resource('formations', FormationController::class)->except(['show']);
         Route::resource('users', UserController::class);
-        Route::resource('paiements', PaiementController::class)->except(['create', 'store']);
+        Route::resource('paiements', PaiementController::class);
         Route::get('/reservations/toutes', [ReservationController::class, 'indexAdmin'])->name('reservations.admin');
         Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
     });

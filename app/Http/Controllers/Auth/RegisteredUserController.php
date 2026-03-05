@@ -32,14 +32,26 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['required', 'string', 'max:20'],
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
         ]);
+        
+        $userCount = User::count();
+        $roleName = $userCount === 0 ? 'admin' : 'candidat';
+        $role = \App\Models\Role::where('name', $roleName)->first();
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'role_id' => $role ? $role->id : null,
+            'is_active' => true,
         ]);
+
+        if ($roleName === 'candidat') {
+            \App\Models\Candidat::create(['user_id' => $user->id]);
+        }
 
         event(new Registered($user));
 

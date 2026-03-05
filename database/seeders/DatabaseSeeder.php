@@ -44,5 +44,9 @@ class DatabaseSeeder extends Seeder
         ]);
         
         \App\Models\Candidat::create(['user_id' => $eleve->id]);
+
+        $this->call([
+            FormationSeeder::class,
+        ]);
     }
 }

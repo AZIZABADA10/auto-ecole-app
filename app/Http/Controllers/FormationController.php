@@ -8,24 +8,24 @@ class FormationController extends Controller {
         return view('formations.index', ['formations' => Formation::all()]);
     }
     public function create() {
-        return view('formations.create');
+        return view('formations.form');
     }
     public function store(Request $request) {
         $validated = $request->validate([
-            'nom' => 'required',
-            'description' => 'nullable',
-            'prix' => 'required|numeric',
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'prix' => 'required|numeric|min:0',
             'duree_heures' => 'nullable|integer',
-            'image_path' => 'nullable|image',
+            'image_path' => 'nullable|image|max:2048',
         ]);
         if ($request->hasFile('image_path')) {
-            $validated['image_path'] = $request->file('image_path')->store('images', 'public');
+            $validated['image_path'] = $request->file('image_path')->store('formations', 'public');
         }
         Formation::create($validated);
-        return redirect()->route('formations.index')->with('success', 'Formation ajoutée');
+        return redirect()->route('formations.index')->with('success', 'Formation ajoutée avec succès.');
     }
     public function edit(Formation $formation) {
-        return view('formations.edit', compact('formation'));
+        return view('formations.form', compact('formation'));
     }
     public function update(Request $request, Formation $formation) {
         $validated = $request->validate([

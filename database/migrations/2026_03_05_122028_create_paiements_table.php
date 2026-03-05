@@ -7,10 +7,11 @@ return new class extends Migration {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidat_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('formation_id')->nullable()->constrained()->nullOnDelete();
             $table->decimal('montant', 8, 2);
             $table->string('methode_paiement')->nullable(); // carte, especes, virement
             $table->date('date_paiement')->nullable();
-            $table->string('statut')->default('en_attente'); // paye, en_attente
+            $table->string('statut')->default('non_paye'); // paye, partiel, non_paye
             $table->timestamps();
         });
     }
