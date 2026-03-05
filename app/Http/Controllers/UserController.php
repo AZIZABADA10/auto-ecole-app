@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Candidat;
 use App\Models\Formation;
+use App\Models\Moniteur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -84,11 +85,10 @@ class UserController extends Controller
 
         if (!$isStaff) {
             $candidat = Candidat::create(['user_id' => $user->id]);
-            
-            if ($request->filled('formation_id')) {
-                // Associe la formation au candidat s'il y a une relation pivot
-                // A adapter selon votre DB exacte (ex: candidat_formation)
-                // $candidat->formations()->attach($request->formation_id);
+        } else {
+            // Si c'est un moniteur, on crée l'entrée dans la table moniteurs
+            if ($user->role && $user->role->name === 'moniteur') {
+                Moniteur::create(['user_id' => $user->id]);
             }
         }
 
