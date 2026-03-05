@@ -5,7 +5,7 @@
 
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
         <h3 class="text-xl font-bold text-gray-800 mb-6">Nouvelle Réservation</h3>
-        <form action="{{ route('reservations.store') }}" method="POST">
+        <form action="{{ route('candidat.reservations.store') }}" method="POST">
             @csrf
             
             <div class="mb-6">
