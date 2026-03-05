@@ -13,6 +13,8 @@ class PaiementController extends Controller
      */
     public function index()
     {
+        \Illuminate\Support\Facades\Gate::authorize('manage-paiements');
+        
         $paiements = Paiement::with(['candidat.user', 'formation'])->latest()->paginate(10);
         $candidats = Candidat::with('user')->get();
         $formations = Formation::all();
@@ -25,6 +27,8 @@ class PaiementController extends Controller
      */
     public function store(Request $request)
     {
+        \Illuminate\Support\Facades\Gate::authorize('create', Paiement::class);
+        
         $validated = $request->validate([
             'candidat_id' => 'required|exists:candidats,id',
             'formation_id' => 'required|exists:formations,id',
@@ -36,7 +40,7 @@ class PaiementController extends Controller
 
         Paiement::create($validated);
 
-        return redirect()->route('paiements.index')->with('success', 'Paiement ajouté avec succès.');
+        return redirect()->route(auth()->user()->role->value . '.paiements.index')->with('success', 'Paiement ajouté avec succès.');
     }
 
     /**
@@ -44,6 +48,8 @@ class PaiementController extends Controller
      */
     public function edit(Paiement $paiement)
     {
+        \Illuminate\Support\Facades\Gate::authorize('update', $paiement);
+        
         $candidats = Candidat::with('user')->get();
         $formations = Formation::all();
         
@@ -55,6 +61,8 @@ class PaiementController extends Controller
      */
     public function update(Request $request, Paiement $paiement)
     {
+        \Illuminate\Support\Facades\Gate::authorize('update', $paiement);
+        
         $validated = $request->validate([
             'candidat_id' => 'required|exists:candidats,id',
             'formation_id' => 'required|exists:formations,id',
@@ -66,7 +74,7 @@ class PaiementController extends Controller
 
         $paiement->update($validated);
 
-        return redirect()->route('paiements.index')->with('success', 'Paiement mis à jour avec succès.');
+        return redirect()->route(auth()->user()->role->value . '.paiements.index')->with('success', 'Paiement mis à jour avec succès.');
     }
 
     /**
@@ -74,8 +82,10 @@ class PaiementController extends Controller
      */
     public function destroy(Paiement $paiement)
     {
+        \Illuminate\Support\Facades\Gate::authorize('delete', $paiement);
+        
         $paiement->delete();
-        return redirect()->route('paiements.index')->with('success', 'Paiement supprimé.');
+        return back()->with('success', 'Paiement supprimé.');
     }
 
     /**
@@ -83,24 +93,17 @@ class PaiementController extends Controller
      */
     public function indexCandidat(Request $request)
     {
-        $candidat = $request->user()->candidat;
+        \Illuminate\Support\Facades\Gate::authorize('viewAny', Paiement::class);
         
-        if (!$candidat) {
-            abort(403, 'Accès réservé aux candidats.');
-        }
+        $candidat = $request->user()->candidat;
+        if (!$candidat) abort(403);
 
         $paiements = Paiement::with('formation')
             ->where('candidat_id', $candidat->id)
             ->latest()
             ->get();
             
-        // Calcul du total des formations du candidat si relation existante
-        // Ici on simplifie: on récupère les formations à travers les paiements ou les réservations
-        // Si vous avez un champ 'prix' dans Formation, on peut s'en servir:
-        
         $totalPaye = $paiements->where('statut', '!=', 'non_paye')->sum('montant');
-        
-        // Formations liées via les paiements
         $formationsIds = $paiements->pluck('formation_id')->filter()->unique();
         $formations = Formation::whereIn('id', $formationsIds)->get();
         
