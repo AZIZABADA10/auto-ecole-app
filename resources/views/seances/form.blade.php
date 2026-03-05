@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-        <form action="{{ isset($seance) ? route('seances.update', $seance) : route('seances.store') }}" method="POST" class="space-y-6">
+        <form action="{{ isset($seance) ? route(auth()->user()->role->value . '.seances.update', $seance) : route(auth()->user()->role->value . '.seances.store') }}" method="POST" class="space-y-6">
             @csrf
             @if(isset($seance)) @method('PUT') @endif
 
@@ -71,7 +71,7 @@
             </div>
 
             <div class="pt-6 border-t border-gray-100 flex justify-end gap-3 mt-8">
-                <a href="{{ route('seances.index') }}" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition shadow-sm font-medium">
+                <a href="{{ route(auth()->user()->role->value . '.seances.index') }}" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition shadow-sm font-medium">
                     Annuler
                 </a>
                 <button type="submit" class="px-6 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition shadow-md font-medium">
