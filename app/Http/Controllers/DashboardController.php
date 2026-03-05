@@ -71,6 +71,57 @@ class DashboardController extends Controller
             ));
         }
 
-        return view('dashboard.candidat');
+        if ($user->role && $user->role->name === 'moniteur') {
+            $moniteur = $user->moniteur;
+            if (!$moniteur) abort(403);
+
+            $seances = \App\Models\Seance::with(['formation', 'reservations.candidat.user'])
+                ->where('moniteur_id', $moniteur->id)
+                ->where('date', '>=', now()->toDateString())
+                ->orderBy('date')
+                ->orderBy('heure_debut')
+                ->get();
+
+            $totalHeures = \App\Models\Seance::where('moniteur_id', $moniteur->id)
+                ->where('statut', 'terminee')
+                ->count();
+
+            return view('dashboard.moniteur', compact('seances', 'totalHeures'));
+        }
+
+        // ESPACE CANDIDAT
+        $candidat = $user->candidat;
+        if (!$candidat) {
+            abort(403, 'Profil candidat introuvable.');
+        }
+
+        // Prochaine séance
+        $prochaineSeance = Reservation::with('seance.formation')
+            ->where('candidat_id', $candidat->id)
+            ->where('statut', 'confirmee')
+            ->whereHas('seance', fn($q) => $q->where('date', '>=', now()->toDateString()))
+            ->first();
+
+        // Statistiques Heures
+        $heuresFaites = Reservation::where('candidat_id', $candidat->id)
+            ->where('statut', 'confirmee')
+            ->whereHas('seance', fn($q) => $q->where('statut', 'terminee'))
+            ->count(); // Chaque séance = 1h par défaut ou à adapter
+
+        // Statistiques Paiements
+        $totalPaye = Paiement::where('candidat_id', $candidat->id)
+            ->whereIn('statut', ['paye', 'partiel'])
+            ->sum('montant');
+        
+        $formationsIds = Reservation::where('candidat_id', $candidat->id)->join('seances', 'reservations.seance_id', '=', 'seances.id')->pluck('seances.formation_id')->unique();
+        $totalDevis = Formation::whereIn('id', $formationsIds)->sum('prix');
+        $resteAPayer = max(0, $totalDevis - $totalPaye);
+
+        return view('dashboard.candidat', compact(
+            'prochaineSeance', 
+            'heuresFaites', 
+            'totalPaye', 
+            'resteAPayer'
+        ));
     }
 }
