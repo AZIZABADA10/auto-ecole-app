@@ -43,12 +43,12 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2">
                             @if($reservation->statut === 'en_attente')
-                            <form action="{{ route('reservations.updateStatus', $reservation) }}" method="POST">
+                            <form action="{{ route(auth()->user()->role->value . '.reservations.updateStatus', $reservation) }}" method="POST">
                                 @csrf @method('PATCH')
                                 <input type="hidden" name="statut" value="confirmee">
                                 <button type="submit" class="text-emerald-600 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-3 py-1 rounded transition">Valider</button>
                             </form>
-                            <form action="{{ route('reservations.updateStatus', $reservation) }}" method="POST">
+                            <form action="{{ route(auth()->user()->role->value . '.reservations.updateStatus', $reservation) }}" method="POST">
                                 @csrf @method('PATCH')
                                 <input type="hidden" name="statut" value="annulee">
                                 <button type="submit" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded transition">Refuser</button>
