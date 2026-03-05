@@ -7,6 +7,7 @@ use App\Http\Controllers\FormationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SeanceController;
 use Illuminate\Support\Facades\Route;
 
 // Routes Publiques
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:admin,assistante')->group(function () {
         Route::resource('formations', FormationController::class)->except(['show']);
         Route::resource('users', UserController::class);
+        Route::resource('seances', SeanceController::class);
         Route::resource('paiements', PaiementController::class);
         Route::get('/reservations/toutes', [ReservationController::class, 'indexAdmin'])->name('reservations.admin');
         Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
