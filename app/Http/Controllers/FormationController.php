@@ -22,7 +22,7 @@ class FormationController extends Controller {
             $validated['image_path'] = $request->file('image_path')->store('formations', 'public');
         }
         Formation::create($validated);
-        return redirect()->route('formations.index')->with('success', 'Formation ajoutée avec succès.');
+        return redirect()->route('admin.formations.index')->with('success', 'Formation ajoutée avec succès.');
     }
     public function edit(Formation $formation) {
         return view('formations.form', compact('formation'));
@@ -39,10 +39,10 @@ class FormationController extends Controller {
             $validated['image_path'] = $request->file('image_path')->store('images', 'public');
         }
         $formation->update($validated);
-        return redirect()->route('formations.index')->with('success', 'Formation modifiée');
+        return redirect()->route('admin.formations.index')->with('success', 'Formation modifiée');
     }
     public function destroy(Formation $formation) {
         $formation->delete();
-        return redirect()->route('formations.index')->with('success', 'Formation supprimée');
+        return redirect()->route('admin.formations.index')->with('success', 'Formation supprimée');
     }
 }
