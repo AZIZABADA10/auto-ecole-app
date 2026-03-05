@@ -72,7 +72,7 @@
             <div class="grid lg:grid-cols-2 gap-20 items-center">
                 <div class="relative">
                     <div class="absolute -inset-4 bg-blue-500/10 rounded-[4rem] transform -rotate-3 scale-105"></div>
-                    <img src="https://images.unsplash.com/photo-1454165833767-027ffea9e77b?auto=format&fit=crop&q=80&w=1200" alt="Learning" class="relative rounded-[3rem] shadow-2xl border-4 border-white">
+                    <img src="{{ asset('Learning.webp') }}" alt="Learning" class="relative rounded-[3rem] shadow-2xl border-4 border-white">
                 </div>
                 <div>
                     <h2 class="text-emerald-500 font-black uppercase tracking-widest text-sm mb-4">Nos Services</h2>
