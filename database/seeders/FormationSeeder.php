@@ -13,24 +13,24 @@ class FormationSeeder extends Seeder
     {
         $formations = [
             [
-                'nom' => 'Permis B',
-                'description' => 'Conduite voiture classique.',
-                'prix' => 3500,
-                'image_path' => 'formations/permis-b.jpg',
+                'nom' => 'Permis B (Auto)',
+                'description' => 'Apprenez à conduire en toute sécurité sur nos véhicules dernière génération.',
+                'prix' => 3800,
+                'image_path' => 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&w=800',
                 'duree_heures' => 20
             ],
             [
-                'nom' => 'Permis C',
-                'description' => 'Conduite de poids lourds et camions.',
-                'prix' => 5000,
-                'image_path' => 'formations/permis-c.jpg',
+                'nom' => 'Permis C (Poids Lourds)',
+                'description' => 'Devenez un professionnel de la route avec notre formation poids lourds complète.',
+                'prix' => 5500,
+                'image_path' => 'https://images.unsplash.com/photo-1586191582056-96fcfdd9f47a?auto=format&fit=crop&q=80&w=800',
                 'duree_heures' => 30
             ],
             [
-                'nom' => 'Permis Moto',
-                'description' => 'Conduite de deux-roues motorisés.',
-                'prix' => 2800,
-                'image_path' => 'formations/permis-moto.jpg',
+                'nom' => 'Permis A (Moto)',
+                'description' => 'Maîtrisez la conduite deux-roues avec nos experts certifiés.',
+                'prix' => 2900,
+                'image_path' => 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=800',
                 'duree_heures' => 15
             ]
         ];
