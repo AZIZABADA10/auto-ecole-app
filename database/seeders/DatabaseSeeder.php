@@ -15,16 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $roleAdmin = \App\Models\Role::create(['name' => 'admin']);
-        $roleAssistante = \App\Models\Role::create(['name' => 'assistante']);
-        $roleCandidat = \App\Models\Role::create(['name' => 'candidat']);
-        $roleMoniteur = \App\Models\Role::create(['name' => 'moniteur']);
-
         User::create([
             'name' => 'Administrateur',
             'email' => 'admin@auto-ecole.com',
             'password' => bcrypt('password'),
-            'role_id' => $roleAdmin->id,
+            'role' => \App\Enums\UserRole::ADMIN,
             'is_active' => true,
         ]);
         
@@ -32,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Assistante',
             'email' => 'assistante@auto-ecole.com',
             'password' => bcrypt('password'),
-            'role_id' => $roleAssistante->id,
+            'role' => \App\Enums\UserRole::ASSISTANTE,
             'is_active' => true,
         ]);
 
@@ -40,7 +35,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Moniteur Ahmed',
             'email' => 'moniteur@auto-ecole.com',
             'password' => bcrypt('password'),
-            'role_id' => $roleMoniteur->id,
+            'role' => \App\Enums\UserRole::MONITEUR,
             'is_active' => true,
         ]);
         
@@ -50,7 +45,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Élève Test',
             'email' => 'eleve@auto-ecole.com',
             'password' => bcrypt('password'),
-            'role_id' => $roleCandidat->id,
+            'role' => \App\Enums\UserRole::CANDIDAT,
             'is_active' => true,
         ]);
         
